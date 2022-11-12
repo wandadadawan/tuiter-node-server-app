@@ -6,6 +6,10 @@ const createTuit = (req, res) => {
   newTuit._id = (new Date()).getTime(); // store as a Number vs String
   newTuit.liked = false;
   newTuit.likes = 0;
+  newTuit.dislikes = 0;
+  newTuit.retuits = 0;
+  newTuit.replies = 0;
+  newTuit.time = '1s';
   tuits.push(newTuit);
   res.json(newTuit);
 };
