@@ -20,7 +20,7 @@ const deleteUser = (req, res) => {
   const userId = req.params['uid'];
   users = users.filter(usr => usr._id !== userId);
   res.sendStatus(200);
-;}
+};
 
 const createUser = (req, res) => {
   const newUser = req.body;
@@ -43,6 +43,6 @@ const findUserById = (req, res) => {
   const userId = req.params.uid;
   const user = users.find(u => u._id === userId);
   res.json(user);
-}
+};
 
 export default UserController;
