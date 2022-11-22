@@ -1,32 +1,29 @@
-import posts from './tuits.js';
+import * as tuitsDao from './tuits-dao.js';
 
-let tuits = posts;
-const createTuit = (req, res) => {
+const createTuit = async (req, res) => {
   const newTuit = req.body;
-  newTuit._id = (new Date()).getTime(); // store as a Number vs String
   newTuit.liked = false;
   newTuit.likes = 0;
   newTuit.dislikes = 0;
   newTuit.retuits = 0;
   newTuit.replies = 0;
   newTuit.time = '1s';
-  tuits.push(newTuit);
-  res.json(newTuit);
+  const insertedTuit = await tuitsDao.createTuit(newTuit)
+  res.json(insertedTuit);
 };
-const findTuits = (req, res) => {
+const findTuits = async (req, res) => {
+  const tuits = await tuitsDao.findTuits();
   res.json(tuits);
 };
-const updateTuit = (req, res) => {
-  const tuitIdToUpdate = parseInt(req.params.tid);
+const updateTuit = async (req, res) => {
+  const tuitIdToUpdate = req.params.tid;
   const updates = req.body;
-  const tuitIndex = tuits.findIndex(t => t._id === tuitIdToUpdate);
-  tuits[tuitIndex] = {...tuits[tuitIndex], ...updates};
-  res.sendStatus(200);
+  const status = await tuitsDao.updateTuit(tuitIdToUpdate, updates);
+  res.send(status); // cannot use sendStatus since sendStatus takes an int like 200, but status is an object.
 };
-const deleteTuit = (req, res) => {
-  const tuitIdToDelete = parseInt(req.params.tid); // parse to number
-  tuits = tuits.filter(t => t._id !== tuitIdToDelete);
-  res.sendStatus(200);
+const deleteTuit = async (req, res) => {
+  const status = await tuitsDao.deleteTuit(req.params.tid)
+  res.send(status);
 };
 
 export default (app) => {
